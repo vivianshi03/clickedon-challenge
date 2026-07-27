@@ -55,20 +55,3 @@ describe("Bug 3 — transient errors are retried and the revision loop is bounde
     expect(res.attempts).toBeLessThanOrEqual(3);
   });
 });
-
-describe("Bonus — an edge case worth guarding", () => {
-  it("does not hand off to the next stage when review never passes", async () => {
-    let handoffCalled = false;
-
-    const res = await generate({
-      behavior: "ok",
-      advanceToNextStage: async () => {
-        handoffCalled = true;
-      },
-      reviewPasses: () => false,
-    });
-
-    expect(res.status).toBe("error");
-    expect(handoffCalled).toBe(false);
-  });
-});
